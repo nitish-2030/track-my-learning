@@ -1,4 +1,4 @@
-# 🚀 LearnFlow — Personal Learning Tracker
+# 🚀 Track-My-Learning — Personal Learning Tracker
 
 A minimal, fast, and distraction-free learning tracker built with plain HTML, CSS, and JavaScript. No frameworks, no backend, no setup — just open and start learning.
 
