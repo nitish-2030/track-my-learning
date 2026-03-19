@@ -2,663 +2,1031 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>LearnFlow</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root[data-theme="dark"] {
-    --bg: #0a0c10;
-    --surface: #111318;
-    --surface2: #181c24;
-    --border: #1e2330;
-    --text: #eceef5;
-    --muted: #5a6480;
-    --cyan: #00d4ff;
-    --cyan-dim: rgba(0,212,255,0.12);
-    --green: #00e676;
-    --green-dim: rgba(0,230,118,0.12);
-    --orange: #ff9800;
-    --orange-dim: rgba(255,152,0,0.12);
-    --red: #ff4757;
-    --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  }
-  :root[data-theme="light"] {
-    --bg: #eef0f7;
-    --surface: #ffffff;
-    --surface2: #f5f6fb;
-    --border: #dde1f0;
-    --text: #141728;
-    --muted: #7b87a8;
-    --cyan: #0077bb;
-    --cyan-dim: rgba(0,119,187,0.1);
-    --green: #009955;
-    --green-dim: rgba(0,153,85,0.1);
-    --orange: #d46b00;
-    --orange-dim: rgba(212,107,0,0.1);
-    --red: #d93025;
-    --card-shadow: 0 2px 16px rgba(0,0,0,0.07);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html { font-size: 16px; }
-  body {
-    font-family: 'Outfit', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    transition: background 0.3s, color 0.3s;
-    -webkit-font-smoothing: antialiased;
-  }
 
-  /* ── TOPBAR ───────────────────────────────── */
-  .topbar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    position: sticky; top:0; z-index:100;
-    background: var(--bg);
-  }
-  .logo {
-    font-family:'Syne', sans-serif;
-    font-size: 1.25rem; font-weight:800;
-    color:var(--cyan); letter-spacing:1px;
-  }
-  .logo span { color:var(--text); }
-  .topbar-right { display:flex; align-items:center; gap:10px; }
-  .streak-pill {
-    display:flex; align-items:center; gap:5px;
-    background:var(--orange-dim); border:1.5px solid var(--orange);
-    border-radius:20px; padding:5px 13px;
-    font-size: .95rem; color:var(--orange); font-weight:700;
-  }
-  .theme-btn {
-    background: var(--surface2); border:1.5px solid var(--border);
-    color:var(--text); border-radius:50%; width:40px; height:40px;
-    cursor:pointer; font-size:1.1rem; transition:.2s;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .theme-btn:hover { border-color:var(--cyan); }
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  --cyan:   #00cfff;
+  --green:  #00e676;
+  --orange: #ffab40;
+  --red:    #ff5252;
 
-  /* ── MAIN ─────────────────────────────────── */
-  .main {
-    max-width: 680px; margin:0 auto;
-    padding: 18px 14px 110px;
-    display:flex; flex-direction:column; gap:14px;
-  }
+  --cyan-a:   rgba(0,207,255,.13);
+  --green-a:  rgba(0,230,118,.13);
+  --orange-a: rgba(255,171,64,.13);
+  --red-a:    rgba(255,82,82,.15);
 
-  /* ── CARDS ────────────────────────────────── */
-  .card {
-    background:var(--surface); border:1.5px solid var(--border);
-    border-radius:18px; padding:18px 16px;
-    box-shadow: var(--card-shadow);
-    transition: border-color .2s;
-  }
-  .card-label {
-    font-family:'Outfit', sans-serif;
-    font-size: .75rem; font-weight:700;
-    color:var(--muted); letter-spacing:1.5px; text-transform:uppercase;
-    margin-bottom:14px; display:flex; align-items:center; gap:8px;
-  }
-  .card-label .dot { width:7px; height:7px; border-radius:50%; background:var(--cyan); flex-shrink:0; }
-  .card-label .dot.green { background:var(--green); }
-  .card-label .dot.orange { background:var(--orange); }
+  --radius-card: 20px;
+  --radius-item: 13px;
+  --radius-btn:  12px;
+  --gap: 14px;
+  --pad: 16px;
+}
+[data-theme="dark"] {
+  --bg:       #0b0d12;
+  --surface:  #13161e;
+  --surface2: #1a1e28;
+  --border:   #222636;
+  --text:     #f0f2fa;
+  --muted:    #525c7a;
+  --shadow:   0 4px 24px rgba(0,0,0,.45);
+}
+[data-theme="light"] {
+  --bg:       #edf0f8;
+  --surface:  #ffffff;
+  --surface2: #f3f5fc;
+  --border:   #dce1f0;
+  --text:     #111421;
+  --muted:    #7e8aaa;
+  --shadow:   0 2px 14px rgba(0,0,0,.07);
+}
 
-  /* ── PROGRESS BAR ─────────────────────────── */
-  .progress-wrap { margin-top:12px; }
-  .progress-track { height:7px; background:var(--border); border-radius:10px; overflow:hidden; }
-  .progress-fill { height:100%; background:linear-gradient(90deg,var(--cyan),var(--green)); border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); }
+/* ══════════════════════════════════════════
+   RESET
+══════════════════════════════════════════ */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html {
+  /* fluid base: 15px on 320px → 17px on 768px+ */
+  font-size: clamp(15px, 1.5vw + 10px, 17px);
+}
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background .3s, color .3s;
+}
 
-  /* ── TOPIC LIST ───────────────────────────── */
-  .topic-list { display:flex; flex-direction:column; gap:9px; margin-top:13px; }
-  .topic-item {
-    display:flex; align-items:center; gap:13px;
-    background:var(--surface2); border:1.5px solid var(--border);
-    border-radius:12px; padding:14px 15px;
-    transition:.2s; cursor:pointer; user-select:none;
-    min-height: 52px;
-  }
-  .topic-item:active { transform:scale(.98); }
-  .topic-item:hover { border-color:var(--cyan); }
-  .topic-item.done { opacity:.45; }
-  .topic-item.done .topic-name { text-decoration:line-through; }
-  .topic-check {
-    width:24px; height:24px; border-radius:7px; border:2px solid var(--muted);
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0; font-size:.85rem; transition:.2s;
-    background: transparent;
-  }
-  .topic-item.done .topic-check { background:var(--green); border-color:var(--green); color:#000; font-weight:700; }
-  .topic-name { font-size: 1rem; font-weight:600; flex:1; line-height:1.3; }
-  .topic-date { font-size:.78rem; color:var(--muted); font-weight:500; white-space:nowrap; }
-  .tap-hint { font-size:.75rem; color:var(--cyan); font-weight:600; white-space:nowrap; }
+/* ══════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════ */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px var(--pad);
+  border-bottom: 1.5px solid var(--border);
+  background: var(--bg);
+  position: sticky; top: 0; z-index: 100;
+}
+.logo {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--cyan);
+  letter-spacing: .5px;
+}
+.logo span { color: var(--text); }
 
-  /* ── FOCUS CARD ───────────────────────────── */
-  .focus-skill-name {
-    font-family:'Syne', sans-serif;
-    font-size: 1.6rem; font-weight:800;
-    color:var(--cyan); margin-bottom:4px; line-height:1.2;
-  }
-  .focus-subtitle { font-size: .95rem; color:var(--muted); font-weight:500; }
-  .focus-actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.streak-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--orange-a);
+  border: 1.5px solid var(--orange);
+  border-radius: 99px;
+  padding: 5px 12px;
+  font-size: .85rem;
+  font-weight: 800;
+  color: var(--orange);
+  white-space: nowrap;
+}
+.theme-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: border-color .2s;
+}
+.theme-btn:hover { border-color: var(--cyan); }
 
-  /* ── REVISION CARD ────────────────────────── */
-  .rev-items { display:flex; flex-direction:column; gap:9px; margin-top:12px; }
-  .rev-item {
-    display:flex; align-items:center; gap:12px;
-    background:var(--orange-dim); border:1.5px solid rgba(255,152,0,.3);
-    border-radius:12px; padding:13px 14px;
-  }
-  .rev-icon { font-size:1.3rem; flex-shrink:0; }
-  .rev-text { flex:1; min-width:0; }
-  .rev-name { font-size: 1rem; font-weight:700; }
-  .rev-meta { font-size:.8rem; color:var(--muted); margin-top:3px; font-weight:500; }
-  .rev-empty { text-align:center; color:var(--muted); font-size: .95rem; padding:14px 0; font-weight:500; }
+/* ══════════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════════ */
+.main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: var(--gap) var(--pad) 100px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
 
-  /* ── LOG CARD ─────────────────────────────── */
-  .log-input {
-    width:100%; background:var(--surface2); border:1.5px solid var(--border);
-    border-radius:12px; padding:13px 15px; color:var(--text);
-    font-family:'Outfit', sans-serif; font-size: 1rem; font-weight:500;
-    resize:none; outline:none; min-height:76px; transition:.2s; line-height:1.5;
-  }
-  .log-input:focus { border-color:var(--cyan); }
-  .log-input::placeholder { color:var(--muted); }
+/* ══════════════════════════════════════════
+   STAT CARDS
+══════════════════════════════════════════ */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 14px 8px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.stat-val {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.stat-val.cyan   { color: var(--cyan); }
+.stat-val.green  { color: var(--green); }
+.stat-val.orange { color: var(--orange); }
+.stat-label {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-top: 5px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
 
-  /* ── BUTTONS ──────────────────────────────── */
-  .btn {
-    display:inline-flex; align-items:center; justify-content:center; gap:6px;
-    padding: 12px 20px; border-radius:11px;
-    font-size: 1rem; font-weight:700;
-    cursor:pointer; border:none; transition:.15s;
-    font-family:'Outfit', sans-serif; line-height:1;
-    min-height: 44px;
-  }
-  .btn:active { transform:scale(.96); }
-  .btn-cyan { background:var(--cyan); color:#000; }
-  .btn-cyan:hover { opacity:.9; }
-  .btn-ghost { background:var(--surface2); color:var(--text); border:1.5px solid var(--border); }
-  .btn-ghost:hover { border-color:var(--cyan); color:var(--cyan); }
-  .btn-green { background:var(--green); color:#000; }
-  .btn-green:hover { opacity:.9; }
-  .btn-sm { padding:9px 15px; font-size:.88rem; min-height:38px; }
-  .btn-red { background: rgba(255,71,87,0.15); color:var(--red); border:1.5px solid rgba(255,71,87,0.35); }
+/* ══════════════════════════════════════════
+   CARD
+══════════════════════════════════════════ */
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 18px var(--pad);
+  box-shadow: var(--shadow);
+}
+.card-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  flex-shrink: 0;
+}
+.dot.g { background: var(--green); }
+.dot.o { background: var(--orange); }
 
-  /* ── STATS ROW ────────────────────────────── */
-  .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-  .stat-card {
-    background:var(--surface); border:1.5px solid var(--border);
-    border-radius:14px; padding:15px 10px; text-align:center;
-    box-shadow: var(--card-shadow);
-  }
-  .stat-val {
-    font-family:'Syne', sans-serif;
-    font-size: 1.7rem; font-weight:800; line-height:1;
-  }
-  .stat-val.cyan { color:var(--cyan); }
-  .stat-val.green { color:var(--green); }
-  .stat-val.orange { color:var(--orange); }
-  .stat-label { font-size:.8rem; color:var(--muted); margin-top:5px; font-weight:600; }
+/* ══════════════════════════════════════════
+   FOCUS CARD
+══════════════════════════════════════════ */
+.focus-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.focus-skill-name {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--cyan);
+  line-height: 1.2;
+  word-break: break-word;
+}
+.focus-next {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.focus-count {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: right;
+  white-space: nowrap;
+  padding-top: 4px;
+  flex-shrink: 0;
+}
 
-  /* ── MODAL ────────────────────────────────── */
-  .modal-overlay {
-    position:fixed; inset:0; background:rgba(0,0,0,.75); backdrop-filter:blur(5px);
-    z-index:200; display:flex; align-items:flex-end; justify-content:center;
-    opacity:0; pointer-events:none; transition:.25s;
-  }
-  @media(min-width:520px) {
-    .modal-overlay { align-items:center; padding:16px; }
-  }
-  .modal-overlay.open { opacity:1; pointer-events:all; }
-  .modal {
-    background:var(--surface); border:1.5px solid var(--border);
-    border-radius:22px 22px 0 0; padding:24px 20px 32px;
-    width:100%; max-width:460px;
-    transform:translateY(40px); transition:.28s cubic-bezier(.4,0,.2,1);
-  }
-  @media(min-width:520px) {
-    .modal { border-radius:22px; padding:26px 24px; }
-  }
-  .modal-overlay.open .modal { transform:translateY(0); }
-  .modal-handle {
-    width:40px; height:4px; background:var(--border);
-    border-radius:4px; margin:0 auto 18px;
-  }
-  @media(min-width:520px) { .modal-handle { display:none; } }
-  .modal-title { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:800; margin-bottom:18px; }
-  .form-group { margin-bottom:15px; }
-  .form-label { font-size:.85rem; color:var(--muted); margin-bottom:7px; display:block; font-weight:700; }
-  .form-input {
-    width:100%; background:var(--surface2); border:1.5px solid var(--border);
-    border-radius:11px; padding:12px 14px; color:var(--text);
-    font-family:'Outfit', sans-serif; font-size:1rem; font-weight:500;
-    outline:none; transition:.2s;
-  }
-  .form-input:focus { border-color:var(--cyan); }
-  .modal-actions { display:flex; gap:10px; margin-top:20px; }
+/* ══════════════════════════════════════════
+   PROGRESS BAR
+══════════════════════════════════════════ */
+.prog-track {
+  height: 7px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 13px;
+}
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  border-radius: 99px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
 
-  /* ── LOG HISTORY ──────────────────────────── */
-  .log-history { margin-top:13px; display:flex; flex-direction:column; gap:8px; max-height:190px; overflow-y:auto; }
-  .log-entry {
-    background:var(--surface2); border-radius:11px; padding:11px 14px;
-    font-size: .95rem; font-weight:500; line-height:1.5;
+/* ══════════════════════════════════════════
+   TOPIC LIST
+══════════════════════════════════════════ */
+.topic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 13px;
+}
+.topic-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-item);
+  padding: 13px 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color .15s, opacity .2s;
+  min-height: 54px;
+  /* prevent text overflow */
+  overflow: hidden;
+}
+.topic-item:active { transform: scale(.98); }
+.topic-item:not(.done):hover { border-color: var(--cyan); }
+.topic-item.done { opacity: .4; }
+.topic-item.done .topic-name { text-decoration: line-through; }
+
+.topic-check {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  border: 2px solid var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: .9rem;
+  font-weight: 800;
+  transition: background .2s, border-color .2s;
+}
+.topic-item.done .topic-check {
+  background: var(--green);
+  border-color: var(--green);
+  color: #000;
+}
+.topic-name {
+  font-size: .95rem;
+  font-weight: 700;
+  flex: 1;
+  line-height: 1.35;
+  /* clamp long names */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topic-badge {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--cyan);
+  background: var(--cyan-a);
+  border-radius: 6px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.topic-date-badge {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.more-label {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ══════════════════════════════════════════
+   ACTION BUTTONS ROW
+══════════════════════════════════════════ */
+.focus-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* ══════════════════════════════════════════
+   REVISION CARD
+══════════════════════════════════════════ */
+.rev-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 12px;
+}
+.rev-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--orange-a);
+  border: 1.5px solid rgba(255,171,64,.3);
+  border-radius: var(--radius-item);
+  padding: 12px 14px;
+}
+.rev-icon { font-size: 1.3rem; flex-shrink: 0; }
+.rev-text { flex: 1; min-width: 0; }
+.rev-name {
+  font-size: .95rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rev-meta {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.rev-empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 600;
+  padding: 14px 0;
+}
+
+/* ══════════════════════════════════════════
+   LOG CARD
+══════════════════════════════════════════ */
+.log-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-item);
+  padding: 13px 15px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  resize: none;
+  outline: none;
+  min-height: 78px;
+  line-height: 1.5;
+  transition: border-color .2s;
+}
+.log-input:focus { border-color: var(--cyan); }
+.log-input::placeholder { color: var(--muted); font-weight: 500; }
+
+.log-history {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.log-entry {
+  background: var(--surface2);
+  border-radius: 11px;
+  padding: 11px 14px;
+  font-size: .88rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.log-date {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+/* ══════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 20px;
+  border-radius: var(--radius-btn);
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 800;
+  line-height: 1;
+  min-height: 46px;
+  cursor: pointer;
+  border: none;
+  transition: opacity .15s, transform .1s;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(.96); }
+.btn-cyan  { background: var(--cyan);  color: #000; }
+.btn-green { background: var(--green); color: #000; }
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+.btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+.btn-red {
+  background: var(--red-a);
+  color: var(--red);
+  border: 1.5px solid rgba(255,82,82,.35);
+}
+.btn-sm { padding: 9px 14px; font-size: .82rem; min-height: 38px; }
+.btn-full { width: 100%; }
+
+/* ══════════════════════════════════════════
+   MODAL  —  bottom sheet on mobile
+══════════════════════════════════════════ */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.75);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;       /* bottom sheet */
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+
+.sheet {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 24px 24px 0 0;
+  padding: 10px var(--pad) 36px;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(50px);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.overlay.open .sheet { transform: translateY(0); }
+
+.sheet-handle {
+  width: 44px; height: 4px;
+  background: var(--border);
+  border-radius: 99px;
+  margin: 8px auto 18px;
+}
+.sheet-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-size: .8rem;
+  font-weight: 800;
+  color: var(--muted);
+  margin-bottom: 7px;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+.form-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-item);
+  padding: 13px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+  transition: border-color .2s;
+}
+.form-input:focus { border-color: var(--cyan); }
+.sheet-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+/* ── Skills list inside sheet ── */
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 55vh;
+  overflow-y: auto;
+  margin-bottom: 4px;
+}
+.skill-row {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-item);
+  padding: 13px 14px;
+}
+.skill-row.focused { border-color: var(--cyan); }
+.skill-row-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+.skill-row-name {
+  flex: 1;
+  font-size: .95rem;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.focus-tag {
+  font-size: .68rem;
+  font-weight: 800;
+  color: var(--cyan);
+  background: var(--cyan-a);
+  border-radius: 6px;
+  padding: 2px 7px;
+  flex-shrink: 0;
+}
+.skill-row-meta {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--surface);
+  border: 1.5px solid var(--green);
+  color: var(--green);
+  padding: 12px 24px;
+  border-radius: 99px;
+  font-size: .9rem;
+  font-weight: 800;
+  white-space: nowrap;
+  z-index: 999;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ══════════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════════ */
+.empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 600;
+  padding: 20px 0;
+  line-height: 1.7;
+}
+
+/* ══════════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ══════════════════════════════════════════
+   DESKTOP  (≥ 600px)
+══════════════════════════════════════════ */
+@media (min-width: 600px) {
+  :root { --pad: 24px; }
+
+  .overlay {
+    align-items: center;
+    padding: 20px;
   }
-  .log-entry-date { color:var(--muted); font-size:.78rem; margin-bottom:3px; font-weight:600; }
-
-  /* ── TOAST ────────────────────────────────── */
-  .toast {
-    position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(70px);
-    background:var(--surface); border:1.5px solid var(--green);
-    color:var(--green); padding:12px 24px; border-radius:30px;
-    font-size: 1rem; font-weight:700; z-index:999; transition:.3s;
-    white-space:nowrap; box-shadow:0 8px 30px rgba(0,0,0,.35);
+  .sheet {
+    border-radius: 24px;
+    padding: 24px 28px 32px;
+    max-height: 85vh;
   }
-  .toast.show { transform:translateX(-50%) translateY(0); }
+  .sheet-handle { display: none; }
 
-  /* ── MISC ─────────────────────────────────── */
-  .section-head { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:0; gap:10px; }
-  .section-head-count { font-size:.9rem; color:var(--muted); text-align:right; font-weight:600; white-space:nowrap; padding-top:4px; }
-  .empty-state { text-align:center; color:var(--muted); font-size: .95rem; padding:22px 0; font-weight:500; line-height:1.6; }
-  .more-label { font-size:.82rem; color:var(--muted); margin-top:9px; text-align:center; font-weight:600; }
-
-  /* ── SCROLLBAR ────────────────────────────── */
-  ::-webkit-scrollbar { width:4px; }
-  ::-webkit-scrollbar-track { background:transparent; }
-  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
-
-  /* ── DESKTOP REFINEMENTS ──────────────────── */
-  @media(min-width:640px) {
-    .topbar { padding:16px 28px; }
-    .main { padding:22px 20px 100px; gap:16px; }
-    .card { padding:22px 20px; }
-    .focus-skill-name { font-size:1.9rem; }
-    .stat-val { font-size:2rem; }
-    .topic-item { padding:15px 16px; }
-  }
+  .stat-val { font-size: 2.1rem; }
+  .focus-skill-name { font-size: 1.85rem; }
+  .topic-name { font-size: 1rem; }
+  .card { padding: 22px var(--pad); }
+  .topbar { padding: 15px var(--pad); }
+}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="logo">Learning<span>Tracker</span></div>
+<!-- ── TOPBAR ───────────────────────────── -->
+<header class="topbar">
+  <div class="logo">Learn<span>Flow</span></div>
   <div class="topbar-right">
-    <div class="streak-pill">🔥 <span id="streakCount">0</span> day streak</div>
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">🌙</button>
+    <div class="streak-pill">🔥 <span id="streakCount">0</span> day</div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
   </div>
-</div>
+</header>
 
-<div class="main">
+<!-- ── MAIN ─────────────────────────────── -->
+<main class="main">
 
-  <!-- STATS ROW -->
+  <!-- STATS -->
   <div class="stats-row">
     <div class="stat-card">
       <div class="stat-val cyan" id="statSkills">0</div>
       <div class="stat-label">Skills</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val green" id="statTopics">0</div>
-      <div class="stat-label">Done Today</div>
+      <div class="stat-val green" id="statToday">0</div>
+      <div class="stat-label">Today</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val orange" id="statProgress">0%</div>
+      <div class="stat-val orange" id="statPct">0%</div>
       <div class="stat-label">Progress</div>
     </div>
   </div>
 
-  <!-- CONTINUE LEARNING CARD -->
-  <div class="card" id="focusCard">
+  <!-- CONTINUE LEARNING -->
+  <div class="card">
     <div class="card-label"><span class="dot"></span> Continue Learning</div>
-    <div id="focusContent">
-      <div class="empty-state">
-        No skill in focus.<br>Add a skill to get started 👇
-      </div>
-    </div>
-    <div class="focus-actions" style="margin-top:14px;">
-      <button class="btn btn-cyan" onclick="openModal('addSkill')">+ Add Skill</button>
-      <button class="btn btn-ghost" onclick="openModal('manageSkills')" id="manageBtn">Manage</button>
+    <div id="focusContent"><div class="empty">No skill yet.<br>Add one to get started 👇</div></div>
+    <div class="focus-actions">
+      <button class="btn btn-cyan" onclick="openSheet('add')">+ Add Skill</button>
+      <button class="btn btn-ghost" onclick="openSheet('manage')">Manage</button>
     </div>
   </div>
 
-  <!-- TODAY'S REVISION CARD -->
+  <!-- TODAY'S REVISION -->
   <div class="card">
-    <div class="card-label"><span class="dot orange"></span> Today's Revision</div>
-    <div class="rev-items" id="revList">
+    <div class="card-label"><span class="dot o"></span> Today's Revision</div>
+    <div class="rev-list" id="revList">
       <div class="rev-empty">🎉 Nothing to revise today!</div>
     </div>
   </div>
 
-  <!-- DAILY LOG CARD -->
+  <!-- QUICK LOG -->
   <div class="card">
-    <div class="card-label"><span class="dot green"></span> Quick Log</div>
-    <textarea class="log-input" id="logInput" placeholder="What did you learn today? (e.g. Learned closures in JS, practiced 3 problems)"></textarea>
-    <div style="display:flex;gap:10px;margin-top:10px;">
+    <div class="card-label"><span class="dot g"></span> Quick Log</div>
+    <textarea class="log-input" id="logInput" placeholder="What did you learn today?&#10;e.g. Learned closures in JS, solved 3 problems"></textarea>
+    <div style="margin-top:10px;">
       <button class="btn btn-green" onclick="saveLog()">Save Log ✓</button>
     </div>
     <div class="log-history" id="logHistory"></div>
   </div>
 
-</div>
+</main>
 
-<!-- ADD SKILL MODAL -->
-<div class="modal-overlay" id="modal-addSkill">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Add New Skill</div>
+<!-- ── ADD SKILL SHEET ───────────────────── -->
+<div class="overlay" id="overlay-add">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Add New Skill</div>
     <div class="form-group">
       <label class="form-label">Skill Name</label>
-      <input class="form-input" id="skillNameInput" placeholder="e.g. JavaScript, DSA, React..." onkeydown="if(event.key==='Enter')document.getElementById('topicsInput').focus()">
+      <input class="form-input" id="inp-skill" placeholder="e.g. JavaScript, DSA, React…"
+        onkeydown="if(event.key==='Enter')document.getElementById('inp-topics').focus()">
     </div>
     <div class="form-group">
       <label class="form-label">Topics (comma separated)</label>
-      <input class="form-input" id="topicsInput" placeholder="e.g. Variables, Functions, DOM, Arrays">
+      <input class="form-input" id="inp-topics" placeholder="e.g. Variables, Functions, DOM, Arrays"
+        onkeydown="if(event.key==='Enter')addSkill()">
     </div>
-    <div class="modal-actions">
-      <button class="btn btn-cyan" onclick="addSkill()" style="flex:1">Add Skill</button>
-      <button class="btn btn-ghost" onclick="closeModal('addSkill')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- MANAGE SKILLS MODAL -->
-<div class="modal-overlay" id="modal-manageSkills">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Your Skills</div>
-    <div id="skillsList" style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto;"></div>
-    <div class="modal-actions">
-      <button class="btn btn-cyan" onclick="closeModal('manageSkills');openModal('addSkill')">+ New Skill</button>
-      <button class="btn btn-ghost" onclick="closeModal('manageSkills')">Close</button>
+    <div class="sheet-actions">
+      <button class="btn btn-cyan" style="flex:1" onclick="addSkill()">Add Skill</button>
+      <button class="btn btn-ghost" onclick="closeSheet('add')">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- MARK REVISION DONE GLOBALLY -->
+<!-- ── MANAGE SKILLS SHEET ──────────────── -->
+<div class="overlay" id="overlay-manage">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Your Skills</div>
+    <div class="skills-list" id="skillsList"></div>
+    <div class="sheet-actions" style="margin-top:16px;">
+      <button class="btn btn-cyan" style="flex:1"
+        onclick="closeSheet('manage');openSheet('add')">+ New Skill</button>
+      <button class="btn btn-ghost" onclick="closeSheet('manage')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ─────────────────────────────── -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── STATE ───────────────────────────────────────────────────────────────────
-let state = JSON.parse(localStorage.getItem('learnflow') || '{}');
-if (!state.skills) state.skills = [];
-if (!state.logs) state.logs = [];
-if (!state.focusSkillId) state.focusSkillId = null;
-if (!state.studyDates) state.studyDates = [];
-if (!state.theme) state.theme = 'dark';
+/* ═══ STATE ══════════════════════════════════════════════ */
+let S = JSON.parse(localStorage.getItem('lf2') || '{}');
+S.skills      = S.skills      || [];
+S.logs        = S.logs        || [];
+S.focusId     = S.focusId     || null;
+S.studyDates  = S.studyDates  || [];
+S.theme       = S.theme       || 'dark';
 
-function save() { localStorage.setItem('learnflow', JSON.stringify(state)); }
+const save = () => localStorage.setItem('lf2', JSON.stringify(S));
 
-// ─── THEME ───────────────────────────────────────────────────────────────────
-document.documentElement.setAttribute('data-theme', state.theme);
-document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '🌙' : '☀️';
-
+/* ═══ THEME ══════════════════════════════════════════════ */
+applyTheme();
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', S.theme);
+  document.getElementById('themeBtn').textContent = S.theme === 'dark' ? '🌙' : '☀️';
+}
 function toggleTheme() {
-  state.theme = state.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', state.theme);
-  document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '🌙' : '☀️';
-  save();
+  S.theme = S.theme === 'dark' ? 'light' : 'dark';
+  save(); applyTheme();
 }
 
-// ─── MODAL ───────────────────────────────────────────────────────────────────
-function openModal(id) {
-  if (id === 'manageSkills') renderSkillsList();
-  document.getElementById('modal-' + id).classList.add('open');
+/* ═══ SHEETS ══════════════════════════════════════════════ */
+function openSheet(id) {
+  if (id === 'manage') buildSkillsList();
+  document.getElementById('overlay-' + id).classList.add('open');
 }
-function closeModal(id) {
-  document.getElementById('modal-' + id).classList.remove('open');
+function closeSheet(id) {
+  document.getElementById('overlay-' + id).classList.remove('open');
 }
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
-});
+document.querySelectorAll('.overlay').forEach(el =>
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); })
+);
 
-// ─── ADD SKILL ───────────────────────────────────────────────────────────────
+/* ═══ ADD SKILL ═══════════════════════════════════════════ */
 function addSkill() {
-  const name = document.getElementById('skillNameInput').value.trim();
-  const topicsRaw = document.getElementById('topicsInput').value.trim();
-  if (!name) return showToast('Enter skill name', false);
-
-  const topics = topicsRaw ? topicsRaw.split(',').map(t => ({
-    id: Date.now() + Math.random(),
-    name: t.trim(),
-    done: false,
-    doneDate: null,
-    revisions: []
-  })).filter(t => t.name) : [];
-
+  const name = document.getElementById('inp-skill').value.trim();
+  if (!name) return toast('Enter a skill name!', false);
+  const raw  = document.getElementById('inp-topics').value.trim();
+  const topics = raw
+    ? raw.split(',').map(t => t.trim()).filter(Boolean).map(n => ({
+        id: Date.now() + Math.random(), name: n,
+        done: false, doneDate: null, revisions: []
+      }))
+    : [];
   const skill = { id: Date.now(), name, topics };
-  state.skills.push(skill);
-  if (!state.focusSkillId) state.focusSkillId = skill.id;
+  S.skills.push(skill);
+  if (!S.focusId) S.focusId = skill.id;
   save(); render();
-  document.getElementById('skillNameInput').value = '';
-  document.getElementById('topicsInput').value = '';
-  closeModal('addSkill');
-  showToast('Skill added! 🎯');
+  document.getElementById('inp-skill').value = '';
+  document.getElementById('inp-topics').value = '';
+  closeSheet('add');
+  toast('Skill added! 🎯');
 }
 
-// ─── SET FOCUS ────────────────────────────────────────────────────────────────
+/* ═══ FOCUS ═══════════════════════════════════════════════ */
 function setFocus(id) {
-  state.focusSkillId = id;
-  save(); render();
-  closeModal('manageSkills');
-  showToast('Focus skill set! 🎯');
+  S.focusId = id; save(); render();
+  closeSheet('manage');
+  toast('Focus set! 🎯');
 }
 
-// ─── DELETE SKILL ─────────────────────────────────────────────────────────────
+/* ═══ DELETE SKILL ════════════════════════════════════════ */
 function deleteSkill(id) {
-  if (!confirm('Delete this skill?')) return;
-  state.skills = state.skills.filter(s => s.id !== id);
-  if (state.focusSkillId === id) {
-    state.focusSkillId = state.skills.length ? state.skills[0].id : null;
-  }
-  save(); render(); renderSkillsList();
+  if (!confirm('Delete this skill and all its data?')) return;
+  S.skills = S.skills.filter(s => s.id !== id);
+  if (S.focusId === id) S.focusId = S.skills[0]?.id || null;
+  save(); render(); buildSkillsList();
 }
 
-// ─── MARK TOPIC DONE ─────────────────────────────────────────────────────────
-function markTopicDone(skillId, topicId) {
-  const skill = state.skills.find(s => s.id === skillId);
-  const topic = skill?.topics.find(t => t.id === topicId);
-  if (!topic || topic.done) return;
-  topic.done = true;
-  topic.doneDate = new Date().toISOString();
-  // schedule revisions
+/* ═══ MARK TOPIC DONE ════════════════════════════════════ */
+function markDone(skillId, topicId) {
+  const sk = S.skills.find(s => s.id === skillId);
+  const tp = sk?.topics.find(t => t.id === topicId);
+  if (!tp || tp.done) return;
+  tp.done = true;
+  tp.doneDate = new Date().toISOString();
   const base = new Date();
-  topic.revisions = [2, 5, 10].map(d => {
-    const dt = new Date(base); dt.setDate(dt.getDate() + d);
+  tp.revisions = [2, 5, 10].map(d => {
+    const dt = new Date(base);
+    dt.setDate(dt.getDate() + d);
     return { daysAfter: d, date: dt.toISOString(), done: false };
   });
-  // mark study today
-  markStudyToday();
+  studyToday(); save(); render();
+  toast('Done! Revision scheduled ✅');
+}
+
+/* ═══ MARK REVISION DONE ════════════════════════════════ */
+function markRevDone(skillId, topicId, ri) {
+  const tp = S.skills.find(s => s.id === skillId)?.topics.find(t => t.id === topicId);
+  if (!tp) return;
+  tp.revisions[ri].done = true;
+  studyToday(); save(); render();
+  toast('Revision done! 🧠');
+}
+
+/* ═══ LOG ════════════════════════════════════════════════ */
+function saveLog() {
+  const t = document.getElementById('logInput').value.trim();
+  if (!t) return toast('Write something first!', false);
+  S.logs.unshift({ text: t, date: new Date().toISOString() });
+  if (S.logs.length > 30) S.logs.length = 30;
+  studyToday();
+  document.getElementById('logInput').value = '';
   save(); render();
-  showToast('Topic done! ✅ Revision scheduled');
+  toast('Saved! 📝');
 }
 
-// ─── MARK REVISION DONE ──────────────────────────────────────────────────────
-function markRevDone(skillId, topicId, revIdx) {
-  const skill = state.skills.find(s => s.id === skillId);
-  const topic = skill?.topics.find(t => t.id === topicId);
-  if (!topic) return;
-  topic.revisions[revIdx].done = true;
-  markStudyToday();
-  save(); render();
-  showToast('Revision done! 🧠');
+/* ═══ STREAK ════════════════════════════════════════════ */
+function studyToday() {
+  const d = new Date().toDateString();
+  if (!S.studyDates.includes(d)) S.studyDates.push(d);
 }
-
-// ─── STREAK LOGIC ─────────────────────────────────────────────────────────────
-function markStudyToday() {
-  const today = new Date().toDateString();
-  if (!state.studyDates.includes(today)) state.studyDates.push(today);
-}
-
 function calcStreak() {
-  if (!state.studyDates.length) return 0;
-  const sorted = [...new Set(state.studyDates)].map(d => new Date(d)).sort((a,b)=>b-a);
-  let streak = 0, prev = new Date(); prev.setHours(0,0,0,0);
-  for (const d of sorted) {
-    const dd = new Date(d); dd.setHours(0,0,0,0);
-    const diff = Math.round((prev - dd) / 86400000);
-    if (diff <= 1) { streak++; prev = dd; } else break;
+  if (!S.studyDates.length) return 0;
+  const dates = [...new Set(S.studyDates)]
+    .map(d => { const x = new Date(d); x.setHours(0,0,0,0); return x; })
+    .sort((a, b) => b - a);
+  let streak = 0;
+  let prev = new Date(); prev.setHours(0,0,0,0);
+  for (const d of dates) {
+    const diff = Math.round((prev - d) / 86400000);
+    if (diff <= 1) { streak++; prev = d; } else break;
   }
   return streak;
 }
 
-// ─── REVISION DUE CHECK ───────────────────────────────────────────────────────
-function getDueRevisions() {
-  const today = new Date(); today.setHours(23,59,59,999);
-  const due = [];
-  state.skills.forEach(skill => {
-    skill.topics.forEach(topic => {
-      if (!topic.revisions) return;
-      topic.revisions.forEach((rev, i) => {
-        if (!rev.done && new Date(rev.date) <= today) {
-          due.push({ skill, topic, revIdx: i, rev });
-        }
-      });
-    });
-  });
-  return due;
+/* ═══ DUE REVISIONS ════════════════════════════════════ */
+function dueRevisions() {
+  const now = new Date(); now.setHours(23,59,59,999);
+  const out = [];
+  S.skills.forEach(sk =>
+    sk.topics.forEach(tp =>
+      (tp.revisions || []).forEach((r, i) => {
+        if (!r.done && new Date(r.date) <= now)
+          out.push({ sk, tp, i, r });
+      })
+    )
+  );
+  return out;
 }
 
-// ─── SAVE LOG ─────────────────────────────────────────────────────────────────
-function saveLog() {
-  const text = document.getElementById('logInput').value.trim();
-  if (!text) return showToast('Write something first!', false);
-  state.logs.unshift({ text, date: new Date().toISOString() });
-  if (state.logs.length > 30) state.logs = state.logs.slice(0, 30);
-  markStudyToday();
-  document.getElementById('logInput').value = '';
-  save(); render();
-  showToast('Log saved! 📝');
+/* ═══ TOAST ════════════════════════════════════════════ */
+function toast(msg, ok = true) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderColor = ok ? 'var(--green)' : 'var(--red)';
+  el.style.color       = ok ? 'var(--green)' : 'var(--red)';
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-// ─── TOAST ───────────────────────────────────────────────────────────────────
-function showToast(msg, success=true) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.borderColor = success ? 'var(--green)' : 'var(--red)';
-  t.style.color = success ? 'var(--green)' : 'var(--red)';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// ─── RENDER ───────────────────────────────────────────────────────────────────
+/* ═══ RENDER ════════════════════════════════════════════ */
 function render() {
   renderStats();
-  renderFocusCard();
-  renderRevCard();
-  renderLogHistory();
+  renderFocus();
+  renderRevisions();
+  renderLogs();
   document.getElementById('streakCount').textContent = calcStreak();
 }
 
 function renderStats() {
-  document.getElementById('statSkills').textContent = state.skills.length;
   const today = new Date().toDateString();
-  let doneToday = 0;
-  state.skills.forEach(s => s.topics.forEach(t => {
-    if (t.done && t.doneDate && new Date(t.doneDate).toDateString() === today) doneToday++;
-  }));
-  document.getElementById('statTopics').textContent = doneToday;
-  // overall progress
-  let total = 0, done = 0;
-  state.skills.forEach(s => { total += s.topics.length; done += s.topics.filter(t=>t.done).length; });
-  const pct = total ? Math.round(done/total*100) : 0;
-  document.getElementById('statProgress').textContent = pct + '%';
+  let total = 0, done = 0, doneToday = 0;
+  S.skills.forEach(sk => {
+    total += sk.topics.length;
+    sk.topics.forEach(tp => {
+      if (tp.done) {
+        done++;
+        if (tp.doneDate && new Date(tp.doneDate).toDateString() === today) doneToday++;
+      }
+    });
+  });
+  document.getElementById('statSkills').textContent = S.skills.length;
+  document.getElementById('statToday').textContent  = doneToday;
+  document.getElementById('statPct').textContent    = total ? Math.round(done / total * 100) + '%' : '0%';
 }
 
-function renderFocusCard() {
+function renderFocus() {
   const el = document.getElementById('focusContent');
-  const skill = state.skills.find(s => s.id === state.focusSkillId);
-  if (!skill) {
-    el.innerHTML = `<div class="empty-state">No skill in focus.<br>Add a skill to get started 👇</div>`;
+  const sk = S.skills.find(s => s.id === S.focusId);
+  if (!sk) {
+    el.innerHTML = `<div class="empty">No skill in focus.<br>Add one to get started 👇</div>`;
     return;
   }
-  const done = skill.topics.filter(t=>t.done).length;
-  const total = skill.topics.length;
-  const pct = total ? Math.round(done/total*100) : 0;
-  // find next undone topic
-  const next = skill.topics.find(t => !t.done);
-  
-  let topicsHTML = '';
-  // show max 5 topics (undone first, then done)
-  const undone = skill.topics.filter(t=>!t.done).slice(0,4);
-  const doneTopics = skill.topics.filter(t=>t.done).slice(-2);
-  [...undone, ...doneTopics].forEach(topic => {
-    const dateStr = topic.done && topic.doneDate ? new Date(topic.doneDate).toLocaleDateString('en',{month:'short',day:'numeric'}) : '';
-    topicsHTML += `
-      <div class="topic-item ${topic.done?'done':''}" onclick="${topic.done?'':`markTopicDone(${skill.id},${topic.id})`}">
-        <div class="topic-check">${topic.done?'✓':''}</div>
-        <div class="topic-name">${topic.name}</div>
-        ${dateStr ? `<div class="topic-date">${dateStr}</div>` : ''}
-        ${!topic.done ? '<div class="tap-hint">tap ✓</div>' : ''}
+  const done  = sk.topics.filter(t => t.done).length;
+  const total = sk.topics.length;
+  const pct   = total ? Math.round(done / total * 100) : 0;
+  const next  = sk.topics.find(t => !t.done);
+
+  // show up to 4 undone + 2 done
+  const rows = [
+    ...sk.topics.filter(t => !t.done).slice(0, 4),
+    ...sk.topics.filter(t =>  t.done).slice(-2)
+  ];
+
+  const items = rows.map(tp => {
+    const dateStr = tp.done && tp.doneDate
+      ? new Date(tp.doneDate).toLocaleDateString('en', { month:'short', day:'numeric' })
+      : '';
+    return `
+      <div class="topic-item ${tp.done ? 'done' : ''}"
+           onclick="${tp.done ? '' : `markDone(${sk.id},${tp.id})`}">
+        <div class="topic-check">${tp.done ? '✓' : ''}</div>
+        <div class="topic-name">${tp.name}</div>
+        ${dateStr          ? `<span class="topic-date-badge">${dateStr}</span>` : ''}
+        ${!tp.done         ? `<span class="topic-badge">tap ✓</span>` : ''}
       </div>`;
-  });
+  }).join('');
+
+  const extra = sk.topics.length > 6
+    ? `<div class="more-label">+${sk.topics.length - 6} more topics</div>` : '';
 
   el.innerHTML = `
-    <div class="section-head">
-      <div>
-        <div class="focus-skill-name">${skill.name}</div>
-        <div class="focus-subtitle">${next ? '▶ Next: ' + next.name : '🎉 All topics done!'}</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+      <div style="min-width:0;">
+        <div class="focus-skill-name">${sk.name}</div>
+        <div class="focus-next">${next ? '▶ Next: ' + next.name : '🎉 All topics done!'}</div>
       </div>
-      <div class="section-head-count">${done}/${total}<br>topics</div>
+      <div class="focus-count">${done}/${total}<br>topics</div>
     </div>
-    <div class="progress-wrap">
-      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
-    </div>
-    <div class="topic-list">${topicsHTML || '<div class="empty-state">Add topics to this skill</div>'}</div>
-    ${skill.topics.length > 6 ? `<div class="more-label">+${skill.topics.length-6} more topics</div>` : ''}
-  `;
+    <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+    <div class="topic-list">${items || '<div class="empty">No topics yet</div>'}</div>
+    ${extra}`;
 }
 
-function renderRevCard() {
-  const list = document.getElementById('revList');
-  const due = getDueRevisions();
+function renderRevisions() {
+  const el  = document.getElementById('revList');
+  const due = dueRevisions();
   if (!due.length) {
-    list.innerHTML = '<div class="rev-empty">🎉 Nothing to revise today!</div>';
+    el.innerHTML = '<div class="rev-empty">🎉 Nothing to revise today!</div>';
     return;
   }
-  list.innerHTML = due.map(({skill, topic, revIdx, rev}) => {
-    const labels = ['1st', '2nd', '3rd'];
-    const revDate = new Date(rev.date).toLocaleDateString('en',{month:'short',day:'numeric'});
+  const labels = ['1st','2nd','3rd'];
+  el.innerHTML = due.map(({ sk, tp, i, r }) => {
+    const d = new Date(r.date).toLocaleDateString('en', { month:'short', day:'numeric' });
     return `
       <div class="rev-item">
         <div class="rev-icon">🧠</div>
         <div class="rev-text">
-          <div class="rev-name">${topic.name}</div>
-          <div class="rev-meta">${skill.name} · ${labels[revIdx]||''} revision · Due ${revDate}</div>
+          <div class="rev-name">${tp.name}</div>
+          <div class="rev-meta">${sk.name} · ${labels[i] || ''} rev · Due ${d}</div>
         </div>
-        <button class="btn btn-sm btn-ghost" onclick="markRevDone(${skill.id},${topic.id},${revIdx})" style="color:var(--green);border-color:var(--green)">Done ✓</button>
+        <button class="btn btn-sm btn-ghost"
+          style="color:var(--green);border-color:var(--green);flex-shrink:0;"
+          onclick="markRevDone(${sk.id},${tp.id},${i})">Done ✓</button>
       </div>`;
   }).join('');
 }
 
-function renderLogHistory() {
+function renderLogs() {
   const el = document.getElementById('logHistory');
-  if (!state.logs.length) { el.innerHTML = ''; return; }
-  el.innerHTML = state.logs.slice(0,5).map(log => `
+  if (!S.logs.length) { el.innerHTML = ''; return; }
+  el.innerHTML = S.logs.slice(0, 5).map(l => `
     <div class="log-entry">
-      <div class="log-entry-date">${new Date(log.date).toLocaleDateString('en',{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
-      <div>${log.text}</div>
+      <div class="log-date">${new Date(l.date).toLocaleDateString('en',{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      <div>${l.text}</div>
     </div>`).join('');
 }
 
-function renderSkillsList() {
+function buildSkillsList() {
   const el = document.getElementById('skillsList');
-  if (!state.skills.length) { el.innerHTML = '<div class="empty-state">No skills yet</div>'; return; }
-  el.innerHTML = state.skills.map(skill => {
-    const done = skill.topics.filter(t=>t.done).length;
-    const total = skill.topics.length;
-    const pct = total ? Math.round(done/total*100) : 0;
-    const isFocus = skill.id === state.focusSkillId;
+  if (!S.skills.length) {
+    el.innerHTML = '<div class="empty">No skills yet</div>';
+    return;
+  }
+  el.innerHTML = S.skills.map(sk => {
+    const done  = sk.topics.filter(t => t.done).length;
+    const total = sk.topics.length;
+    const pct   = total ? Math.round(done / total * 100) : 0;
+    const isFocus = sk.id === S.focusId;
     return `
-        <div style="background:var(--surface2);border:1.5px solid ${isFocus?'var(--cyan)':'var(--border)'};border-radius:13px;padding:13px 15px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">
-          <div style="flex:1;font-weight:700;font-size:1rem;">${skill.name} ${isFocus?'<span style="font-size:.75rem;color:var(--cyan);font-weight:700;">[FOCUS]</span>':''}</div>
-          <button class="btn btn-sm btn-ghost" onclick="setFocus(${skill.id})" style="${isFocus?'color:var(--cyan);border-color:var(--cyan)':''}">Focus</button>
-          <button class="btn btn-sm btn-red" onclick="deleteSkill(${skill.id})">✕</button>
+      <div class="skill-row ${isFocus ? 'focused' : ''}">
+        <div class="skill-row-top">
+          <div class="skill-row-name">${sk.name}</div>
+          ${isFocus ? '<span class="focus-tag">FOCUS</span>' : ''}
+          <button class="btn btn-sm btn-ghost" onclick="setFocus(${sk.id})"
+            style="${isFocus ? 'color:var(--cyan);border-color:var(--cyan);' : ''}">
+            Focus
+          </button>
+          <button class="btn btn-sm btn-red" onclick="deleteSkill(${sk.id})">✕</button>
         </div>
-        <div style="font-size:.85rem;color:var(--muted);margin-bottom:7px;font-weight:600;">${done}/${total} topics · ${pct}%</div>
-        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div class="skill-row-meta">${done}/${total} topics · ${pct}%</div>
+        <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
       </div>`;
   }).join('');
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+/* ═══ INIT ════════════════════════════════════════════════ */
 render();
 </script>
 </body>
